@@ -1,0 +1,30 @@
+require 'yaml'
+
+# Load data from tea.yaml file
+def load_tea_yaml(filename)
+  YAML.load(File.read(filename))
+end
+
+# Calculate total number of code owners
+def total_code_owners(code_owners)
+  code_owners.length
+end
+
+# Main function
+def main
+  filename = 'tea.yaml'
+  data = load_tea_yaml(filename)
+
+  code_owners = data['codeOwners']
+  quorum = data['quorum']
+  version = data['version']
+
+  total_owners = total_code_owners(code_owners)
+
+  puts "Total Code Owners: #{total_owners}"
+  puts "Quorum: #{quorum}"
+  puts "Version: #{version}"
+end
+
+# Run the program
+main if __FILE__ == $PROGRAM_NAME
