@@ -1,0 +1,60 @@
+require 'yaml'
+
+class TeaProject
+  attr_accessor :code_owners, :quorum, :version
+
+  def initialize
+    @code_owners = []
+    @quorum = 0
+    @version = ""
+  end
+
+  # Save project data to tea.yaml file
+  def save_to_yaml(filename)
+    File.open(filename, 'w') { |file| file.write(to_yaml) }
+    puts "Project constitution saved to #{filename}"
+  end
+
+  # Convert TeaProject object to YAML
+  def to_yaml
+    { 'codeOwners' => @code_owners, 'quorum' => @quorum, 'version' => @version }.to_yaml
+  end
+
+  # Load project data from tea.yaml file
+  def self.load_from_yaml(filename)
+    data = YAML.load(File.read(filename))
+    project = TeaProject.new
+    project.code_owners = data['codeOwners']
+    project.quorum = data['quorum']
+    project.version = data['version']
+    project
+  end
+end
+
+# Main function
+def main
+  project = TeaProject.new
+
+  # Gather project data
+  puts "Please enter the code owners (separated by commas):"
+  project.code_owners = gets.chomp.split(',')
+
+  puts "Please enter the quorum:"
+  project.quorum = gets.chomp.to_i
+
+  puts "Please enter the version:"
+  project.version = gets.chomp
+
+  # Save project data to tea.yaml
+  project.save_to_yaml('tea.yaml')
+
+  # Load project data from tea.yaml and display
+  loaded_project = TeaProject.load_from_yaml('tea.yaml')
+  puts "\nLoaded Project:"
+  puts "Code Owners: #{loaded_project.code_owners}"
+  puts "Quorum: #{loaded_project.quorum}"
+  puts "Version: #{loaded_project.version}"
+end
+
+# Run the program
+main if __FILE__ == $PROGRAM_NAME
